@@ -116,7 +116,7 @@ $$\text{decay}[p_1] \leftarrow \text{decay}[p_1] + \delta, \quad \text{decay}[p_
    * Decay factors reset back to $1.0$ **only** when a 2Q gate is successfully executed.
    * *Note on 1Q Gates*: Single-qubit gates preserve decay memory without resetting it, ensuring stability in interleaved circuits.
 
-4. **Stochastic Cost Perturbation ($\epsilon$)**: A minor random cost variation $\epsilon \sim U$-noise\_scale, noise\_scale) enables multi-seed stochastic exploration.
+4. **Stochastic Cost Perturbation ($\epsilon$)**: A minor random cost variation $\epsilon \sim U$(-noise\_scale, noise\_scale) enables multi-seed stochastic exploration.
 
 #### Structural Tie-Breaking Metric
 
