@@ -98,7 +98,7 @@ $$\text{Cost}(p_1, p_2) = \max\Big(\text{decay}[p_1], \text{decay}[p_2]\Big) \ti
 
 Where:
 
-1. **Immediate Front Distance ($D(q_1, q_2)$)**:
+1. **Immediate Front Distance (\$D(q_1, q_2)\$)**:
    The shortest-path distance on the hardware graph between the physical locations $q_1 = \pi(l_1)$ and $q_2 = \pi(l_2)$ of the current unresolved $2\text{Q}$ gate $(l_1, l_2)$, assuming the candidate swap is executed.
 
 2. **Extended Lookahead Window ($\bar{D}_E$)**: The average shortest-path hardware distance of the next $E$ upcoming 2Q gates in the circuit's topological DAG dependency front ($E =$ ext\_size):
