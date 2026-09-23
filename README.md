@@ -69,9 +69,9 @@ $$\text{Score}_{\text{min}} = 0.5 \times \max\left(\text{CriticalPath}_{\text{DA
 - ```collect_all_placements()```: Runs all strategy generators and deduplicates initial mapping candidates.
 
 ### ```sabre_core.py```
-- ```sabre_layout()```: Coordinates forward/backward passes and tracks the global minimum score across iterations.
--```single_sabre_pass()```: Executes a single routing pass with lookahead, decay memory, stochastic noice, and degree-based tie-breaking.
--```estimate_score()```: Fast evaluator for circuit quality using $Score=SWAPs+0.5\times Depth$
+- ```sabre_layout()```: Coordinates forward and backward passes and tracks the global minimum score across iterations.
+- ```single_sabre_pass()```: Executes a single routing pass with lookahead, decay memory, stochastic noice, and degree-based tie-breaking.
+- ```estimate_score()```: Fast evaluator for circuit quality using $Score=SWAPs+0.5\times Depth$
 
 ## Performance Benchmark
 | Benchmark | Logical Qubits | 2Q Gates | SWAPs | Depth | Final Score |
@@ -98,7 +98,7 @@ $$\text{Cost}(p_1, p_2) = \max\Big(\text{decay}[p_1], \text{decay}[p_2]\Big) \ti
 
 Where:
 
-1. **Immediate Front Distance (\$D(q_1, q_2)\$)**:
+1. **Immediate Front Distance ( $D(q_1, q_2)$ )**:
    The shortest-path distance on the hardware graph between the physical locations $q_1 = \pi(l_1)$ and $q_2 = \pi(l_2)$ of the current unresolved $2\text{Q}$ gate $(l_1, l_2)$, assuming the candidate swap is executed.
 
 2. **Extended Lookahead Window ($\bar{D}_E$)**: The average shortest-path hardware distance of the next $E$ upcoming 2Q gates in the circuit's topological DAG dependency front ($E =$ ext\_size):
