@@ -32,10 +32,11 @@ Our routing kernel extends the standard SABRE algorithm with several crucial sta
 * **Stochastic Cost Perturbation**: Applies controlled noise ($\pm 5\%$) to lookahead cost calculations, enabling multi-seed exploration to break out of greedy local minima.
 
 ### 3. Parallel Search Engine & Theoretical Lower-Bound Early Pruning (`solver.py`)
+
 * **Theoretical Lower-Bound Early Exit**: Before executing search iterations, `solver.py` computes the absolute mathematical lower bound for circuit score:
 
   $$\text{Score}_{\text{min}} = 0.5 \times \max\left(\text{CriticalPath}_{\text{DAG}}, \left\lceil \frac{N_{2Q}}{\lfloor N_{\text{active}}/2 \rfloor} \right\rceil\right)$$
-  
+
   If any worker process achieves this theoretical minimum score ($0 \text{ SWAPs}$ and optimal depth), the parallel executor terminates immediately, saving compute time.
 * **Parallel Cross-Product Search Grid**: Executes multi-core grid searches over parameter tuples $(W, E, \text{Decay}, \text{Seeds})$ and candidate initial placements using `concurrent.futures.ProcessPoolExecutor`.
 * **Redundant SWAP Cancellation**: A post-processing cleanup pass identifies and purges adjacent inverse SWAP operations (`SWAP u v` followed by `SWAP u v`) that preserve dependency ordering.
