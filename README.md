@@ -98,20 +98,18 @@ Where:
 1. **Immediate Front Distance ($D(q_1, q_2)$)**:
    The shortest-path distance on the hardware graph between the physical locations $q_1 = \pi(l_1)$ and $q_2 = \pi(l_2)$ of the current unresolved $2\text{Q}$ gate $(l_1, l_2)$, assuming the candidate swap is executed.
 
-2. **Extended Lookahead Window ($\bar{D}_{E}$)**:
-   The average shortest-path hardware distance of the next $E$ upcoming $2\text{Q}$ gates in the circuit's topological DAG dependency front ($E = \text{ext\_size}$):
-   $$\bar{D}_{E} = \frac{1}{\vert{}E_{2\text{Q}}\vert{}} \sum_{g=(u,v) \in E_{2\text{Q}}} D\big(\pi(u), \pi(v)\big)$$
+2. **Extended Lookahead Window ($\bar{D}_E$)**: The average shortest-path hardware distance of the next $E$ upcoming 2Q gates in the circuit's topological DAG dependency front ($E = \text{ext\_size}$):
+   $$\bar{D}_E = \frac{1}{\vert{}E_{2\text{Q}}\vert{}} \sum_{g=(u,v) \in E_{2\text{Q}}} D\big(\pi(u), \pi(v)\big)$$
    The parameter $W \in [0.0, 1.0]$ controls the weight of future dependencies versus immediate progress.
 
-3. **Anti-Oscillation Decay Memory ($\text{decay}[p]$)**:
-   To prevent infinite thrashing loops where two physical qubits repeatedly swap back and forth without executing gates, every physical node $p$ tracks a decay factor initialized to $1.0$.
-   - When a swap is executed on $(p_1, p_2)$, their decay values increase:
-     $$\text{decay}[p_1] \leftarrow \text{decay}[p_1] + \delta, \quad \text{decay}[p_2] \leftarrow \text{decay}[p_2] + \delta$$
-   - Decay factors reset back to $1.0$ **only** when a $2\text{Q}$ gate is successfully executed.
-   - *Note on $1\text{Q}$ Gates*: Single-qubit gates preserve decay memory without resetting it, ensuring stability in interleaved circuits.
+3. **Anti-Oscillation Decay Memory (`decay[p]`)**: To prevent infinite thrashing loops where two physical qubits repeatedly swap back and forth without executing gates, every physical node $p$ tracks a decay factor initialized to $1.0$.
 
-4. **Stochastic Cost Perturbation ($\epsilon$)**:
-   A minor random cost variation $\epsilon \sim U(-\text{noise\_scale}, \text{noise\_scale})$ enables multi-seed stochastic exploration, allowing parallel workers to escape shallow greedy local minima.
+   * When a swap is executed on $(p_1, p_2)$, their decay values increase:
+     $$\text{decay}[p_1] \leftarrow \text{decay}[p_1] + \delta, \quad \text{decay}[p_2] \leftarrow \text{decay}[p_2] + \delta$$
+   * Decay factors reset back to $1.0$ **only** when a 2Q gate is successfully executed.
+   * *Note on 1Q Gates*: Single-qubit gates preserve decay memory without resetting it, ensuring stability in interleaved circuits.
+
+4. **Stochastic Cost Perturbation ($\epsilon$)**: A minor random cost variation $\epsilon \sim U(-\text{noise\_scale}, \text{noise\_scale})$ enables multi-seed stochastic exploration.
 
 #### Structural Tie-Breaking Metric
 
