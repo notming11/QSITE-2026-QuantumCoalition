@@ -35,7 +35,7 @@ Our routing kernel extends the standard SABRE algorithm with several crucial sta
 
 * **Theoretical Lower-Bound Early Exit**: Before executing search iterations, `solver.py` computes the absolute mathematical lower bound for circuit score:
 
-  \$$\text{Score}_{\text{min}} = 0.5 \times \max\left(\text{CriticalPath}_{\text{DAG}}, \left\lceil \frac{N_{2Q}}{\lfloor N_{\text{active}}/2 \rfloor} \right\rceil\right)\$$
+$$\text{Score}_{\text{min}} = 0.5 \times \max\left(\text{CriticalPath}_{\text{DAG}}, \left\lceil \frac{N_{2Q}}{\lfloor N_{\text{active}}/2 \rfloor} \right\rceil\right)$$
 
   If any worker process achieves this theoretical minimum score ($0 \text{ SWAPs}$ and optimal depth), the parallel executor terminates immediately, saving compute time.
 * **Parallel Cross-Product Search Grid**: Executes multi-core grid searches over parameter tuples $(W, E, \text{Decay}, \text{Seeds})$ and candidate initial placements using `concurrent.futures.ProcessPoolExecutor`.
@@ -101,9 +101,9 @@ Where:
 1. **Immediate Front Distance ($D(q_1, q_2)$)**:
    The shortest-path distance on the hardware graph between the physical locations $q_1 = \pi(l_1)$ and $q_2 = \pi(l_2)$ of the current unresolved $2\text{Q}$ gate $(l_1, l_2)$, assuming the candidate swap is executed.
 
-2. **Extended Lookahead Window ($\bar{D}_E$)**: The average shortest-path hardware distance of the next $E$ upcoming 2Q gates in the circuit's topological DAG dependency front (\$E = \text{ext\_size}\$):
+2. **Extended Lookahead Window ($\bar{D}_E$)**: The average shortest-path hardware distance of the next $E$ upcoming 2Q gates in the circuit's topological DAG dependency front ($E =$ ext\_size):
 
-   \$$\bar{D}_E = \frac{1}{\vert{}E_{2\text{Q}}\vert{}} \sum_{g=(u,v) \in E_{2\text{Q}}} D\big(\pi(u), \pi(v)\big)\$$
+$$\bar{D}_E = \frac{1}{\vert{}E_{2\text{Q}}\vert{}} \sum_{g=(u,v) \in E_{2\text{Q}}} D\big(\pi(u), \pi(v)\big)$$
 
    The parameter $W \in [0.0, 1.0]$ controls the weight of future dependencies versus immediate progress.
 
@@ -111,12 +111,12 @@ Where:
 
    * When a swap is executed on $(p_1, p_2)$, their decay values increase:
 
-     $$\text{decay}[p_1] \leftarrow \text{decay}[p_1] + \delta, \quad \text{decay}[p_2] \leftarrow \text{decay}[p_2] + \delta$$
+$$\text{decay}[p_1] \leftarrow \text{decay}[p_1] + \delta, \quad \text{decay}[p_2] \leftarrow \text{decay}[p_2] + \delta$$
 
    * Decay factors reset back to $1.0$ **only** when a 2Q gate is successfully executed.
    * *Note on 1Q Gates*: Single-qubit gates preserve decay memory without resetting it, ensuring stability in interleaved circuits.
 
-4. **Stochastic Cost Perturbation ($\epsilon$)**: A minor random cost variation $\epsilon \sim U(-\text{noise\_scale}, \text{noise\_scale})$ enables multi-seed stochastic exploration.
+4. **Stochastic Cost Perturbation ($\epsilon$)**: A minor random cost variation $\epsilon \sim U$-noise\_scale, noise\_scale) enables multi-seed stochastic exploration.
 
 #### Structural Tie-Breaking Metric
 
