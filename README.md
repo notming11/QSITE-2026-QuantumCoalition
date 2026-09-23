@@ -27,7 +27,7 @@ Finding an optimal initial physical mapping is critical for minimizing SWAP over
 ### 2. Enhanced Bidirectional SABRE Core (`sabre_core.py`)
 Our routing kernel extends the standard SABRE algorithm with several crucial stability and optimization mechanisms:
 * **Asymmetric Bidirectional Refinement**: Runs iterative forward and backward routing passes. The forward pass evaluates routing cost, while the backward pass refines the initial layout mapping for subsequent iterations.
-* **Structural Tie-Breaking Metric**: When multiple candidate SWAPs yield identical lookahead costs, tie-breaking selects physical edges based on maximum node degree sum ($\sum \text{deg}(p)$) and minimum node decay sum to favor highly connected hardware regions.
+* **Structural Tie-Breaking Metric**: When multiple candidate SWAPs yield identical lookahead costs, tie-breaking selects physical edges based on maximum node degree sum ( $\sum \text{deg}(p)$ ) and minimum node decay sum to favor highly connected hardware regions.
 * **Anti-Oscillation Decay Memory**: Maintains decay factors on physical nodes involved in SWAPs to prevent infinite thrashing loops, preserving decay memory across single-qubit operations.
 * **Stochastic Cost Perturbation**: Applies controlled noise ($\pm 5\%$) to lookahead cost calculations, enabling multi-seed exploration to break out of greedy local minima.
 
@@ -150,11 +150,11 @@ Gates occurring at layer $0$ carry full weight ($1.0$), while distant future gat
 1. **Stage 1: Simulated Annealing (SA) Exploration**
    Starting from a random initial placement $\pi$, the algorithm explores candidate logical-logical 2-swaps $\pi'$.
    - The cost function is the weighted QAP distance:
-     $$\text{Cost}_{\text{QAP}}(\pi) = \sum_{(u,v) \in E_{\text{logical}}} w(u,v) \cdot D\big(\pi(u), \pi(v)\big)$$
+$$\text{Cost}_{\text{QAP}}(\pi) = \sum_{(u,v) \in E_{\text{logical}}} w(u,v) \cdot D\big(\pi(u), \pi(v)\big)$$
    - Swaps causing cost increase $\Delta > 0$ are accepted with Boltzmann probability $P(\text{accept}) = \exp(-\Delta / T)$, cooling from $T_0 = 15.0$ at rate $\alpha = 0.94$.
 
 2. **Stage 2: Steepest-Descent 2-Opt Polish**
-   After annealing, a deterministic 2-Opt local search refines the solution by exhaustively testing all pairwise swaps ($\pi(l_1) \leftrightarrow \pi(l_2)$) and logical-to-empty physical moves ($\pi(l) \to p_{\text{empty}}$) until reaching a strict local optimum.
+   After annealing, a deterministic 2-Opt local search refines the solution by exhaustively testing all pairwise swaps ( $\pi(l_1) \leftrightarrow \pi(l_2)$ ) and logical-to-empty physical moves ( $\pi(l) \to p_{\text{empty}}$ ) until reaching a strict local optimum.
 
 ---
 
@@ -182,7 +182,7 @@ Hardware Coupling Graph   ──► Spectral Laplacian Eigenvectors ──► 2D
 
 #### C. Compact Subgrid Clustering
 
-When running smaller circuits (e.g., $8$–$12$ qubits) on larger QPUs (e.g., $20$+ qubits), placing qubits sparsely across the entire processor causes unnecessary routing overhead across long hardware paths.
+When running smaller circuits (e.g., $8$ – $12$ qubits) on larger QPUs (e.g., $20$+ qubits), placing qubits sparsely across the entire processor causes unnecessary routing overhead across long hardware paths.
 
 1. **Subgrid Extraction**:
    Selects the top high-degree physical nodes as central "seeds." For each seed $p_{\text{seed}}$, the algorithm selects the $k = \vert{}V_{\text{active}}\vert{}$ closest physical nodes based on hardware distance $D(p_{\text{seed}}, p)$ and node degree, extracting a compact, contiguous physical subgraph $G_{\text{sub}}$.
