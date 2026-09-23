@@ -150,7 +150,9 @@ Gates occurring at layer $0$ carry full weight ($1.0$), while distant future gat
 1. **Stage 1: Simulated Annealing (SA) Exploration**
    Starting from a random initial placement $\pi$, the algorithm explores candidate logical-logical 2-swaps $\pi'$.
    - The cost function is the weighted QAP distance:
+
 $$\text{Cost}_{\text{QAP}}(\pi) = \sum_{(u,v) \in E_{\text{logical}}} w(u,v) \cdot D\big(\pi(u), \pi(v)\big)$$
+
    - Swaps causing cost increase $\Delta > 0$ are accepted with Boltzmann probability $P(\text{accept}) = \exp(-\Delta / T)$, cooling from $T_0 = 15.0$ at rate $\alpha = 0.94$.
 
 2. **Stage 2: Steepest-Descent 2-Opt Polish**
