@@ -169,3 +169,37 @@ def solve(
                 best_routed_program = routed
 
     return best_placement, cancel_redundant_swaps(best_routed_program)
+
+def optimize_1q(program: list[tuple]) -> list[tuple]:
+    """
+    Fuses consecutive chains of ('1Q', i) gates on the same wire into 
+    a single ('1Q', i) gate.
+    """
+    optimized = []
+    # Tracks whether the last operation on qubit i was a 1Q gate
+    has_pending_1q = {}
+
+    for op in program:
+        kind = op[0]
+        
+        if kind == '1Q':
+            q = op[1]
+            # If a 1Q gate is already waiting on wire q, the new 1Q gate 
+            # fuses into it (skip adding a second 1Q tuple)
+            if has_pending_1q.get(q, False):
+                continue  
+            
+            optimized.append(op)
+            has_pending_1q[q] = True
+
+        elif kind == '2Q':
+            u, v = op[1], op[2]
+            # A 2Q gate breaks the 1Q chain on both participating qubits
+            has_pending_1q[u] = False
+            has_pending_1q[v] = False
+            optimized.append(op)
+            
+        else:
+            optimized.append(op)
+
+    return optimized

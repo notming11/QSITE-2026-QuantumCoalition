@@ -194,3 +194,39 @@ When running smaller circuits (e.g., $8$ – $12$ qubits) on larger QPUs (e.g., 
 
 3. **Benefit**:
    Forces logical qubits to remain localized within tightly coupled physical regions, reducing the maximum path length required during routing.
+
+### 3. Post-Routing Optimization Pass & Stretch Goals
+
+After SABRE completes hardware-compliant SWAP insertion, the circuit undergoes an automated post-routing optimization pass to eliminate redundant gate overhead prior to physical pulse synthesis.
+
+#### A. Single-Qubit (1Q) Gate Matrix Fusion & U(2) Euler Decomposition
+
+Arbitrary sequences of consecutive single-qubit gates on a physical qubit (e.g., $R_x$​,$R_y$​,$H$,$T$,$R_z$​) can accumulate during layout manipulation and SWAP insertion.
+
+**U(2) Matrix Product Group Closure:**
+Because 2×2 unitary matrices form a closed algebraic group $U(2)$, multiplying n consecutive $1Q$ unitary matrices yields a single single-qubit operator:
+
+$U_\text{fused}​=\Pi​Uk​=Un​⋅Un−1​⋯U2​⋅U1​∈U(2)$
+
+**Euler Universal Angle Decomposition (U3):**
+The resulting 2×2 matrix $U_fused$​ is analytically decomposed into three standard Euler rotation angles (θ,ϕ,λ):
+
+$U3(θ,ϕ,λ)=(cos(2θ​)e^{iϕ}sin(2θ​)​−eiλsin(2θ​)ei(ϕ+λ)cos(2θ​)​)$
+
+**Hardware Pulse Compression & Virtual Z Execution:**
+In native microwave control frameworks (such as IBM Quantum $R_Z$/$S_X$), $R_Z$ phase shifts are executed virtually in software with zero pulse duration. Fusing consecutive 1Q operations guarantees that any un-entangled gate sequence collapses to at most two physical $S_X$ pulses interspaced with Virtual $Z$ gates:
+
+$U(θ,ϕ,λ)≡R_Z(ϕ)⋅S_X⋅R_Z(θ+π)⋅S_X⋅R_Z(λ−π)$
+
+#### B. Redundant Inverse SWAP Cancellation
+
+SABRE routing or stochastic local search passes can occasionally generate back-to-back inverse SWAP gates on adjacent physical edges (p1​,p2​) when navigating dense gate fronts.
+
+The optimizer scans the physical circuit DAG for direct sequences:
+
+$SWAP(p1​,p2​)⋅SWAP(p1​,p2​)=I$
+
+If no intervening 2Q gate operates on p1​ or p2​, both SWAPs evaluate to the identity operator I and are stripped from the DAG without altering physical qubit mapping downstream.
+
+---
+
